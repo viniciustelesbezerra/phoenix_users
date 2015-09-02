@@ -1,0 +1,6 @@
+<div class="jumbotron">
+  <h2>User !</h2>
+  <p class="lead">
+    <span>name - <%= @user.name %></span>
+  </p>
+</div>

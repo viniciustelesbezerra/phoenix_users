@@ -1,0 +1,20 @@
+<h1>Edit User</h1>
+
+<form action="/users/<%= @user.id %>" method="post">
+  <input type="hidden" name="_method" value="put" />
+
+  <div class="form-group">
+    <label for="user[name]">Name</label>
+    <input type="text" name="user[name]" class="form-control" value="<%= @user.name %>" />
+
+    <label for="user[email]">Email</label>
+    <input type="text" name="user[email]" class="form-control" value="<%= @user.email %>" />
+
+    <label for="user[bio]">Bio</label>
+    <input type="text" name="user[bio]" class="form-control"value=" <%= @user.bio %>" />
+
+    <label for="user[age]">Age</label>
+    <input type="number" name="user[age]" class="form-control" value="<%= @user.age %>" />
+  </div>
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>
