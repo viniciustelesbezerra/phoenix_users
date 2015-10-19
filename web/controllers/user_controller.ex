@@ -9,7 +9,7 @@ defmodule PhoenixCrud.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
+    user = get_user(id)
     render conn, "show.html", user: user
   end
 
@@ -29,26 +29,30 @@ defmodule PhoenixCrud.UserController do
   end
 
   def edit(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
+    user = get_user(id)
     render conn, "edit.html", user: user
   end
 
   def update(conn, %{"id" => id, "user" => params}) do
-    user = Repo.get!(User, id)
+    user = get_user(id)
     changeset = User.changeset user, params
 
     if changeset.valid? do
       Repo.update(changeset)
       redirect conn, to: user_path(conn, :show, user.id)
     else
-      redirect conn, to: user_path(conn, :edit, user: user)
+      redirect conn, to: user_path(conn, :edit, user.id)
     end
   end
 
   def destroy(conn, %{"id" => id}) do
-    user = Repo.get!(User, id)
+    user = get_user(id)
     Repo.delete!(user)
 
     redirect conn, user_path(conn, :index)
+  end
+
+  defp get_user(id) do
+    user = Repo.get!(User, id)
   end
 end

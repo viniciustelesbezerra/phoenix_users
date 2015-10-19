@@ -11,12 +11,15 @@
         <th>Delete</th>
       </tr>
 
-    <%= for user <- users_keys @users do %>
+    <%= for user <- @users do %>
       <tr>
         <td style="text-align: left;"><%= user.name %></td>
         <td style="text-align: left;"><%= user.email %></td>
         <td style="text-align: left;"><%= user.bio %></td>
         <td style="text-align: left;"><%= user.age %></td>
+        <td style="text-align: left;"><%= user.age %></td>
+        <td style="text-align: left;"><a href="/users/<%= user.id %>">Show</a></td>
+
         <td style="text-align: left;">
         <%#= link_to method: :delete %>
         <a href='/users/delete/<%= user.id %>'>Delete</td>

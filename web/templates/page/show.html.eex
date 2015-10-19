@@ -1,4 +1,4 @@
 <div class="jumbotron">
-  <h2>Show page Whatever!</h2>
+  <h2><%= @page %> page Whatever!</h2>
   <p class="lead">The current page is => <%= @page %></p>
 </div>
