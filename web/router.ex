@@ -9,24 +9,20 @@ defmodule PhoenixCrud.Router do
     plug :put_secure_browser_headers
   end
 
-  scope alias: PhoenixCrud do
+  scope "/", PhoenixCrud do
+    pipe_through :browser
+
     get "/", WelcomeController, :index, as: :root
-
     get "/pages/:page", PageController, :show, as: :page
-
     resources "users", UserController
+    resources "posts", PostController
   end
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", PhoenixCrud do
-    pipe_through :browser
+  scope "/api", PhoenixCrud do
+    pipe_through :api
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", PhoenixCrud do
-  #   pipe_through :api
-  # end
 end

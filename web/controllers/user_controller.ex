@@ -4,6 +4,8 @@ defmodule PhoenixCrud.UserController do
   alias PhoenixCrud.User
   alias PhoenixCrud.Repo
 
+  plug :scrub_params, "post" when action in [:create, :update]
+
   def index(conn, _params) do
     render conn, "index.html", users: Repo.all(User)
   end
@@ -17,8 +19,8 @@ defmodule PhoenixCrud.UserController do
     render conn, "new.html"
   end
 
-  def create(conn, %{"user" => params}) do
-    changeset = User.changeset %User{}, params
+  def create(conn, %{"user" => user_params}) do
+    changeset = User.changeset %User{}, user_params
 
     if changeset.valid? do
       user = Repo.insert!(changeset)
@@ -33,9 +35,9 @@ defmodule PhoenixCrud.UserController do
     render conn, "edit.html", user: user
   end
 
-  def update(conn, %{"id" => id, "user" => params}) do
+  def update(conn, %{"id" => id, "user" => user_params}) do
     user = get_user(id)
-    changeset = User.changeset user, params
+    changeset = User.changeset user, user_params
 
     if changeset.valid? do
       Repo.update(changeset)
