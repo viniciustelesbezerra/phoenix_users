@@ -17,17 +17,8 @@ defmodule PhoenixCrud.PostController do
   end
 
   def create(conn, %{"post" => post_params}) do
-    changeset = Post.changeset(%Post{}, post_params)
-
-    case Repo.insert(changeset) do
-      {:ok, _post} ->
-        conn
-        |> put_flash(:info, "Post created successfully.")
-        |> redirect(to: post_path(conn, :index))
-      {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset,
-          users: available_users)
-    end
+    Post.changeset(%Post{}, post_params)
+    |> create_new_post(conn)
   end
 
   def show(conn, %{"id" => id}) do
@@ -46,15 +37,7 @@ defmodule PhoenixCrud.PostController do
     post = Repo.get!(Post, id)
     changeset = Post.changeset(post, post_params)
 
-    case Repo.update(changeset) do
-      {:ok, post} ->
-        conn
-        |> put_flash(:info, "Post updated successfully.")
-        |> redirect(to: post_path(conn, :show, post))
-      {:error, changeset} ->
-        render(conn, "edit.html", post: post,
-          changeset: changeset, users: available_users)
-    end
+    update_post(changeset, post, conn)
   end
 
   def delete(conn, %{"id" => id}) do
@@ -64,6 +47,30 @@ defmodule PhoenixCrud.PostController do
     conn
     |> put_flash(:info, "Post deleted successfully.")
     |> redirect(to: post_path(conn, :index))
+  end
+
+  defp create_new_post(changeset, conn) do
+    case Repo.insert(changeset) do
+      {:ok, _post} ->
+        conn
+        |> put_flash(:info, "Post created successfully.")
+        |> redirect(to: post_path(conn, :index))
+      {:error, changeset} ->
+        render(conn, "new.html", changeset: changeset,
+          users: available_users)
+    end
+  end
+
+  defp update_post(changeset, post, conn) do
+    case Repo.update(changeset) do
+      {:ok, post} ->
+        conn
+        |> put_flash(:info, "Post updated successfully.")
+        |> redirect(to: post_path(conn, :show, post))
+      {:error, changeset} ->
+        render(conn, "edit.html",  post: post, changeset: changeset,
+          users: available_users)
+    end
   end
 
   defp available_users do
