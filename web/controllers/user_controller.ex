@@ -36,8 +36,8 @@ defmodule PhoenixCrud.UserController do
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
-    user = get_user(id)
-    changeset = User.changeset user, user_params
+    changeset = get_user(id)
+    |> User.changeset(user_params)
 
     if changeset.valid? do
       Repo.update(changeset)
