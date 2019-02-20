@@ -52,9 +52,7 @@ defmodule PhoenixCrud.PostController do
   defp create_new_post(changeset, conn) do
     case Repo.insert(changeset) do
       {:ok, _post} ->
-        conn
-        |> put_flash(:info, "Post created successfully.")
-        |> redirect(to: post_path(conn, :index))
+        post_created_msg_and_redirected(conn)
       {:error, changeset} ->
         render(conn, "new.html", changeset: changeset,
           users: available_users)
@@ -64,13 +62,23 @@ defmodule PhoenixCrud.PostController do
   defp update_post(changeset, post, conn) do
     case Repo.update(changeset) do
       {:ok, post} ->
-        conn
-        |> put_flash(:info, "Post updated successfully.")
-        |> redirect(to: post_path(conn, :show, post))
+        update_conn_and_redirect(conn, post)
       {:error, changeset} ->
         render(conn, "edit.html",  post: post, changeset: changeset,
           users: available_users)
     end
+  end
+
+  defp post_created_msg_and_redirected(conn) do
+    conn
+    |> put_flash(:info, "Post created successfully.")
+    |> redirect(to: post_path(conn, :index))
+  end
+
+  defp update_conn_and_redirect(conn, post) do
+    conn
+    |> put_flash(:info, "Post updated successfully.")
+    |> redirect(to: post_path(conn, :show, post))
   end
 
   defp available_users do
