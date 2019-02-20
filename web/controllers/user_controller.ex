@@ -39,12 +39,7 @@ defmodule PhoenixCrud.UserController do
     changeset = get_user(id)
     |> User.changeset(user_params)
 
-    if changeset.valid? do
-      Repo.update(changeset)
-      redirect conn, to: user_path(conn, :show, user.id)
-    else
-      redirect conn, to: user_path(conn, :edit, user.id)
-    end
+    update_change_set(changeset.valid?, conn, user.id, changeset)
   end
 
   def destroy(conn, %{"id" => id}) do
@@ -52,6 +47,15 @@ defmodule PhoenixCrud.UserController do
     Repo.delete!(user)
 
     redirect conn, user_path(conn, :index)
+  end
+
+  defp update_change_set(true, conn, user_id, changeset) do
+    Repo.update(changeset)
+    redirect conn, to: user_path(conn, :show, user.id)
+  end
+
+  defp update_change_set(false, conn, user_id, changeset) do
+    redirect conn, to: user_path(conn, :edit, user.id)
   end
 
   defp get_user(id) do
